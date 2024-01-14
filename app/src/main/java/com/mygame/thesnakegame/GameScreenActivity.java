@@ -1,14 +1,16 @@
-package com.example.thesnakegame;
+package com.mygame.thesnakegame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.thesnakegame.R;
+
+public class GameScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.game_screen);
     }
 }
