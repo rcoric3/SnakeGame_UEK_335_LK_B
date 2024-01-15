@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
             android:padding="16dp"
-            android:text="GAME SCORE: 0"
+            android:text="GAME SCORE: "
             android:textColor="#000000"
             android:textSize="40sp"
             android:textStyle="bold" />

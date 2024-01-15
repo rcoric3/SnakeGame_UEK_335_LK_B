@@ -116,10 +116,10 @@ public class Snake {
             arrSnakeParts.get(length - 1).setBm(bm_tail_right);
         } else if (arrSnakeParts.get(length - 1).getrLeft().intersect(arrSnakeParts.get(length - 2).getrBody())) {
             arrSnakeParts.get(length - 1).setBm(bm_tail_left);
-        }else   if (arrSnakeParts.get(length - 1).getrTop().intersect(arrSnakeParts.get(length-2).getrBody())){
-            arrSnakeParts.get(length-1).setBm(bm_tail_up);
-        }else   if (arrSnakeParts.get(length - 1).getrBottom().intersect(arrSnakeParts.get(length-2).getrBody())){
-            arrSnakeParts.get(length-1).setBm(bm_tail_down);
+        } else if (arrSnakeParts.get(length - 1).getrTop().intersect(arrSnakeParts.get(length - 2).getrBody())) {
+            arrSnakeParts.get(length - 1).setBm(bm_tail_up);
+        } else if (arrSnakeParts.get(length - 1).getrBottom().intersect(arrSnakeParts.get(length - 2).getrBody())) {
+            arrSnakeParts.get(length - 1).setBm(bm_tail_down);
         }
     }
 
@@ -323,5 +323,24 @@ public class Snake {
         this.move_right = false;
         this.move_bottom = false;
         this.move_top = false;
+    }
+
+    public void addPart() {
+        PartSnake p = this.arrSnakeParts.get(length - 1);
+        this.length += 1;
+        if (p.getBm() == bm_tail_right) {
+            this.arrSnakeParts.add(new PartSnake(bm_tail_right,
+                    p.getX() - GameView.sizeOfMap, p.getY()));
+        } else if (p.getBm() == bm_tail_left) {
+            this.arrSnakeParts.add(new PartSnake(bm_tail_left,
+                    p.getX() + GameView.sizeOfMap, p.getY()));
+        } else if (p.getBm() == bm_tail_up) {
+            this.arrSnakeParts.add(new PartSnake(bm_tail_up,
+                    p.getX(), p.getY() + GameView.sizeOfMap));
+        } else if (p.getBm() == bm_tail_down) {
+            this.arrSnakeParts.add(new PartSnake(bm_tail_down,
+                    p.getX(), p.getY() - GameView.sizeOfMap));
+        }
+
     }
 }

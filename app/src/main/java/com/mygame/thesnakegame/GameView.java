@@ -8,18 +8,24 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorSpace;
+import android.graphics.Rect;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
+import android.telephony.ims.ImsManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.thesnakegame.R;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GameView extends View {
-    private Bitmap bitmapGrass1, bitmapGrass2, bmSnake;
+    private Bitmap bitmapGrass1, bitmapGrass2, bmSnake, bmApple;
     public static int sizeOfMap = 75 * Constants.SCREEN_WIDTH / 1080;
 
     private int h = 21, w = 12;
@@ -32,15 +38,24 @@ public class GameView extends View {
 
     private Runnable r;
 
+    private Apple apple;
+
+    private int score = 0;
+
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
+
         super(context, attrs);
+
+
         bitmapGrass1 = BitmapFactory.decodeResource(this.getResources(), R.drawable.grass);
         bitmapGrass1 = Bitmap.createScaledBitmap(bitmapGrass1, sizeOfMap, sizeOfMap, true);
         bitmapGrass2 = BitmapFactory.decodeResource(this.getResources(), R.drawable.grass2);
         bitmapGrass2 = Bitmap.createScaledBitmap(bitmapGrass2, sizeOfMap, sizeOfMap, true);
         bmSnake = BitmapFactory.decodeResource(this.getResources(), R.drawable.snake);
         bmSnake = Bitmap.createScaledBitmap(bmSnake, 14 * sizeOfMap, sizeOfMap, true);
+        bmApple = BitmapFactory.decodeResource(this.getResources(), R.drawable.apple);
+        bmApple = Bitmap.createScaledBitmap(bmApple, sizeOfMap, sizeOfMap, true);
         for (int i = 0; i < h; i++) {
             for (int a = 0; a < w; a++) {
                 if ((i + a) % 2 == 0) {
@@ -55,6 +70,8 @@ public class GameView extends View {
             }
         }
         snake = new Snake(bmSnake, arrGrass.get(80).getX(), arrGrass.get(60).getY(), 4);
+        apple = new Apple(bmApple, arrGrass.get(randomApple()[0]).getX(),
+                arrGrass.get(randomApple()[1]).getY());
         handler = new Handler();
         r = new Runnable() {
             @Override
@@ -62,6 +79,8 @@ public class GameView extends View {
                 invalidate();
             }
         };
+
+
     }
 
     @Override
@@ -108,6 +127,17 @@ public class GameView extends View {
         return true;
     }
 
+    public interface OnScoreChangeListener {
+        void onScoreChanged(int newScore);
+    }
+
+    private OnScoreChangeListener scoreChangeListener;
+
+    public void setOnScoreChangeListener(OnScoreChangeListener listener) {
+        this.scoreChangeListener = listener;
+    }
+
+
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
@@ -118,6 +148,43 @@ public class GameView extends View {
         }
         snake.update();
         snake.draw(canvas);
+        apple.draw(canvas);
+        if (snake.getArrSnakeParts().get(0).getrBody().intersect(apple.getR())) {
+            score++;
+            if (scoreChangeListener != null) {
+                scoreChangeListener.onScoreChanged(score);
+            }
+            randomApple();
+            apple.reset(arrGrass.get(randomApple()[0]).getX(), arrGrass.get(randomApple()[1]).getY());
+            snake.addPart();
+        }
         handler.postDelayed(r, 100);
+    }
+
+
+    public int[] randomApple() {
+        int[] xy = new int[2];
+        Random r = new Random();
+        xy[0] = r.nextInt(arrGrass.size() - 1);
+        xy[1] = r.nextInt(arrGrass.size() - 1);
+        Rect rect = new Rect(arrGrass.get(xy[0]).getX(), arrGrass.get(xy[1]).getY(),
+                arrGrass.get(xy[0]).getX() + sizeOfMap,
+                arrGrass.get(xy[1]).getY() + sizeOfMap);
+        boolean check = true;
+        while (check) {
+            check = false;
+            for (int i = 0; i < snake.getArrSnakeParts().size(); i++) {
+                if (rect.intersect(snake.getArrSnakeParts().get(i).getrBody())) {
+                    check = true;
+                    xy[0] = r.nextInt(arrGrass.size() - 1);
+                    xy[0] = r.nextInt(arrGrass.size() - 1);
+                    rect = new Rect(arrGrass.get(xy[0]).getX(), arrGrass.get(xy[1]).getY(),
+                            arrGrass.get(xy[0]).getX() + sizeOfMap,
+                            arrGrass.get(xy[1]).getY() + sizeOfMap);
+
+                }
+            }
+        }
+        return xy;
     }
 }
