@@ -8,6 +8,7 @@ import com.example.thesnakegame.R;
 
 public class GameScreenActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
