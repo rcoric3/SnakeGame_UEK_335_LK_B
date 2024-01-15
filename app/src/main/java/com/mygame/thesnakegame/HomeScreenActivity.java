@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.thesnakegame.R;
@@ -30,7 +29,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     }
 
     private void goToNextScreen() {
-        Intent intent = new Intent(this, GameScreenActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }

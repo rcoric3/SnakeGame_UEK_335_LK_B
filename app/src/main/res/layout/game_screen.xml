@@ -2,9 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#01A024"
     android:paddingLeft="12dp"
-    android:paddingRight="12dp">
+    android:paddingRight="12dp"
+    tools:context="com.mygame.thesnakegame.MainActivity">
+
 
     <LinearLayout
         android:id="@+id/linearLayoutTitle"
@@ -29,14 +32,11 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/linearLayoutGameBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/linearLayoutTitle"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="250dp"
-        android:background="@drawable/gamebackground" />
+    <com.mygame.thesnakegame.GameView
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="50dp" />
 
     <RelativeLayout
         android:layout_width="250dp"
@@ -126,12 +126,14 @@
             android:orientation="horizontal">
 
             <ImageButton
+                android:id="@+id/restartButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/restarticon" />
 
             <ImageButton
+                android:id="@+id/exitButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
