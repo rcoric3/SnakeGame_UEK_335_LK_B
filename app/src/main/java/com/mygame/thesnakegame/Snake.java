@@ -1,5 +1,8 @@
 package com.mygame.thesnakegame;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
@@ -7,6 +10,7 @@ import java.util.ArrayList;
 
 public class Snake {
 
+    // Bewegungsrichtungen
     private boolean move_left, move_right, move_top, move_bottom;
 
     private Bitmap bm, bm_head_up, bm_head_down, bm_head_left, bm_head_right, bm_body_vertical,
@@ -15,6 +19,8 @@ public class Snake {
 
     private int x, y, length;
     private ArrayList<PartSnake> arrSnakeParts = new ArrayList<>();
+
+    private MainActivity mainActivity;
 
     public Snake(Bitmap bm, int x, int y, int length) {
         this.bm = bm;
@@ -121,6 +127,12 @@ public class Snake {
         } else if (arrSnakeParts.get(length - 1).getrBottom().intersect(arrSnakeParts.get(length - 2).getrBody())) {
             arrSnakeParts.get(length - 1).setBm(bm_tail_down);
         }
+        int headX = arrSnakeParts.get(0).getX();
+        int headY = arrSnakeParts.get(0).getY();
+        if (headX < 0 || headX >= Constants.SCREEN_WIDTH || headY < 0 || headY >= Constants.SCREEN_HEIGHT) {
+            mainActivity.goToHomeScreen();
+        }
+
     }
 
     public void draw(Canvas canvas) {

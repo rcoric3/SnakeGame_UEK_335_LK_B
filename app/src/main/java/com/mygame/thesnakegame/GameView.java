@@ -42,11 +42,12 @@ public class GameView extends View {
 
     private int score = 0;
 
+    private MainActivity mainActivity;
+
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
 
         super(context, attrs);
-
 
         bitmapGrass1 = BitmapFactory.decodeResource(this.getResources(), R.drawable.grass);
         bitmapGrass1 = Bitmap.createScaledBitmap(bitmapGrass1, sizeOfMap, sizeOfMap, true);
@@ -80,6 +81,9 @@ public class GameView extends View {
             }
         };
 
+        if (context instanceof MainActivity) {
+            mainActivity = (MainActivity) context;
+        }
 
     }
 
@@ -93,22 +97,22 @@ public class GameView extends View {
                     my = event.getY();
                     move = true;
                 } else {
-                    if (mx - event.getX() > 100 * Constants.SCREEN_WIDTH / 580 &&
+                    if (mx - event.getX() > 100 * Constants.SCREEN_WIDTH / 1080 &&
                             !snake.isMove_right()) {
                         mx = event.getX();
                         my = event.getY();
                         snake.setMove_left(true);
-                    } else if (event.getX() - mx > 100 * Constants.SCREEN_WIDTH / 580 &&
+                    } else if (event.getX() - mx > 100 * Constants.SCREEN_WIDTH / 1080 &&
                             !snake.isMove_left()) {
                         mx = event.getX();
                         my = event.getY();
                         snake.setMove_right(true);
-                    } else if (my - event.getY() > 100 * Constants.SCREEN_WIDTH / 580 &&
+                    } else if (my - event.getY() > 100 * Constants.SCREEN_WIDTH / 1080 &&
                             !snake.isMove_bottom()) {
                         mx = event.getX();
                         my = event.getY();
                         snake.setMove_top(true);
-                    } else if (event.getY() - mx > 100 * Constants.SCREEN_WIDTH / 580 &&
+                    } else if (event.getY() - mx > 100 * Constants.SCREEN_WIDTH / 1080 &&
                             !snake.isMove_top()) {
                         mx = event.getX();
                         my = event.getY();
@@ -127,17 +131,6 @@ public class GameView extends View {
         return true;
     }
 
-    public interface OnScoreChangeListener {
-        void onScoreChanged(int newScore);
-    }
-
-    private OnScoreChangeListener scoreChangeListener;
-
-    public void setOnScoreChangeListener(OnScoreChangeListener listener) {
-        this.scoreChangeListener = listener;
-    }
-
-
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
@@ -150,41 +143,68 @@ public class GameView extends View {
         snake.draw(canvas);
         apple.draw(canvas);
         if (snake.getArrSnakeParts().get(0).getrBody().intersect(apple.getR())) {
-            score++;
-            if (scoreChangeListener != null) {
-                scoreChangeListener.onScoreChanged(score);
-            }
-            randomApple();
-            apple.reset(arrGrass.get(randomApple()[0]).getX(), arrGrass.get(randomApple()[1]).getY());
+            int[] newApplePosition = randomApple();
+            apple.reset(arrGrass.get(newApplePosition[0]).getX(), arrGrass.get(newApplePosition[1]).getY());
             snake.addPart();
+            score++;
+            if (mainActivity != null) {
+                mainActivity.updateScore(score);
+            }
         }
-        handler.postDelayed(r, 100);
+        handler.postDelayed(r, 150);
     }
-
 
     public int[] randomApple() {
         int[] xy = new int[2];
         Random r = new Random();
-        xy[0] = r.nextInt(arrGrass.size() - 1);
-        xy[1] = r.nextInt(arrGrass.size() - 1);
-        Rect rect = new Rect(arrGrass.get(xy[0]).getX(), arrGrass.get(xy[1]).getY(),
-                arrGrass.get(xy[0]).getX() + sizeOfMap,
-                arrGrass.get(xy[1]).getY() + sizeOfMap);
+
         boolean check = true;
         while (check) {
-            check = false;
-            for (int i = 0; i < snake.getArrSnakeParts().size(); i++) {
-                if (rect.intersect(snake.getArrSnakeParts().get(i).getrBody())) {
-                    check = true;
-                    xy[0] = r.nextInt(arrGrass.size() - 1);
-                    xy[0] = r.nextInt(arrGrass.size() - 1);
-                    rect = new Rect(arrGrass.get(xy[0]).getX(), arrGrass.get(xy[1]).getY(),
-                            arrGrass.get(xy[0]).getX() + sizeOfMap,
-                            arrGrass.get(xy[1]).getY() + sizeOfMap);
+            xy[0] = r.nextInt(w);
+            xy[1] = r.nextInt(h);
 
+            Rect rect = new Rect(
+                    arrGrass.get(xy[0] + xy[1] * w).getX(),
+                    arrGrass.get(xy[0] + xy[1] * w).getY(),
+                    arrGrass.get(xy[0] + xy[1] * w).getX() + sizeOfMap,
+                    arrGrass.get(xy[0] + xy[1] * w).getY() + sizeOfMap
+            );
+
+            check = false;
+            for (PartSnake snakePart : snake.getArrSnakeParts()) {
+                if (rect.intersect(snakePart.getrBody())) {
+                    check = true;
+                    break;
                 }
             }
         }
+
         return xy;
+    }
+
+
+    public void changeSnakeDirection(String direction) {
+// Zurücksetzen der aktuellen Bewegungsrichtung
+        snake.setMove_left(false);
+        snake.setMove_right(false);
+        snake.setMove_top(false);
+        snake.setMove_bottom(false);
+
+        switch (direction) {
+            case "UP":
+                snake.setMove_top(true);
+                break;
+            case "DOWN":
+                snake.setMove_bottom(true);
+                break;
+            case "LEFT":
+                snake.setMove_left(true);
+                break;
+            case "RIGHT":
+                snake.setMove_right(true);
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -1,0 +1,41 @@
+<!-- res/layout/game_over_popup.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:gravity="center_horizontal"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!-- Buttons Container -->
+    <TextView
+        android:id="@+id/textViewGameOver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Game Over"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/buttonRestart"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/restarticon"
+        android:text="Restart" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonExit"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/exiticon"
+            android:text="Exit" />
+    </LinearLayout>
+</LinearLayout>

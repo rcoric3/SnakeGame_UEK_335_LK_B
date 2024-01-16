@@ -33,6 +33,7 @@
     </LinearLayout>
 
     <com.mygame.thesnakegame.GameView
+        android:id="@+id/game_view"
         android:layout_width="350dp"
         android:layout_height="350dp"
         android:layout_marginTop="100dp"
