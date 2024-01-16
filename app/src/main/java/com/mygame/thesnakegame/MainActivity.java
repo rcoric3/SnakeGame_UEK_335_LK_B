@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         Constants.SCREEN_HEIGHT = dm.heightPixels;
         setContentView(R.layout.game_screen);
 
+
         final GameView gameView = findViewById(R.id.game_view);
 
         ImageButton buttonUp = findViewById(R.id.buttonUp);
@@ -101,9 +102,9 @@ public class MainActivity extends AppCompatActivity {
         }
         scoreTextView.setText("GAME SCORE:" + score);
     }
-    public void goToHomeScreen() {
-        Intent intent = new Intent(this, HomeScreenActivity.class);
+
+    public void goToGameOverScreen() {
+        Intent intent = new Intent(this, GameOver.class);
         startActivity(intent);
-        finish();
     }
 }

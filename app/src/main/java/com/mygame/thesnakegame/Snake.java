@@ -2,6 +2,7 @@ package com.mygame.thesnakegame;
 
 import static androidx.core.content.ContextCompat.startActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 
 public class Snake {
 
+    private Context context;
     // Bewegungsrichtungen
     private boolean move_left, move_right, move_top, move_bottom;
 
@@ -22,11 +24,13 @@ public class Snake {
 
     private MainActivity mainActivity;
 
+
     public Snake(Bitmap bm, int x, int y, int length) {
         this.bm = bm;
         this.x = x;
         this.y = y;
         this.length = length;
+        mainActivity = new MainActivity();
         bm_body_bottom_left = Bitmap.createBitmap(bm, 0, 0, GameView.sizeOfMap,
                 GameView.sizeOfMap);
         bm_body_bottom_right = Bitmap.createBitmap(bm, GameView.sizeOfMap, 0, GameView.sizeOfMap,
@@ -129,11 +133,13 @@ public class Snake {
         }
         int headX = arrSnakeParts.get(0).getX();
         int headY = arrSnakeParts.get(0).getY();
-        if (headX < 0 || headX >= Constants.SCREEN_WIDTH || headY < 0 || headY >= Constants.SCREEN_HEIGHT) {
-            mainActivity.goToHomeScreen();
+        if (headX < 0 || headX >= Constants.SCREEN_WIDTH || headY < 0 || headY >=
+                Constants.SCREEN_HEIGHT) {
+          mainActivity.goToGameOverScreen();
         }
 
     }
+
 
     public void draw(Canvas canvas) {
         for (int i = 0; i < length; i++) {
